@@ -1,0 +1,102 @@
+<html>
+	<head>
+		<title>tankz yay</title>
+		<script type="text/javascript" src="resources/tank.js"></script>
+	</head>
+	<body>
+		<canvas id="game" width="500" height="500" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
+		<script>
+			var win = document.getElementById("game");
+			var ctx = win.getContext("2d");
+			var width = win.width;
+			var height = win.height;
+			var shapelist = [];
+			var dragging = initdragging();
+			var p = getplayer();
+			var img = ['resources/tbot.png','resources/ttop.png'];
+
+			window.onkeydown = function (e) {
+				var code = e.keyCode ? e.keyCode : e.which;
+				if (code === 38 || code === 87) {
+					p.forward = true;
+				}
+				if (code === 83 || code === 40) {
+					p.backward = true;					}
+				if (code === 68 || code === 39) {
+					p.right = true;
+				}
+				if (code === 65 || code === 37) {
+					p.left = true;
+				}
+
+			win.onclick = function (e) {
+      }
+
+			function getMousePos(canvas, evt) {
+				var rekt = canvas.getBoundingClientRect();
+				return {
+					x: evt.clientX - rekt.left,
+					y: evt.clientY - rekt.top
+				};
+			}
+
+			win.addEventListener('mousemove', function(evt) {
+				var pos = getMousePos(win, evt);
+				p.target.x = pos.x;
+				p.target.y = pos.y;
+			})
+
+			window.onkeyup = function (e) {
+				var code = e.keyCode ? e.keyCode : e.which;
+				if (code === 38 || code === 87) {
+					p.forward = false;
+				}
+				if (code === 83 || code === 40) {
+					p.backward = false;
+				}
+				if (code === 68 || code === 39) {
+					p.right = false;
+				}
+				if (code === 65 || code === 37) {
+					p.left = false;
+				}
+			};
+
+			function init() {
+				window.requestAnimationFrame(gameloop);
+			}
+
+			function gameloop() {
+				drawshapes();
+				window.requestAnimationFrame(gameloop);
+			}
+
+			function drawshapes() {
+				ctx.beginPath();
+				ctx.clearRect(0,0, win.width, win.height);
+				ctx.closePath();
+				p.update();
+				dragging.update();
+				for (var i = 0; i < shapelist.length; i++) {
+					if (shapelist[i].type != "null") {
+						shapelist[i].update();
+					}
+				}
+			}
+			function shapelistdelete(i) {
+				var kek = [];
+				for (var j = 0; j < shapelist.length; j++) {
+					if (j != i) {
+						kek.push(shapelist[j]);
+					}
+					else {
+						kek.push
+					}
+				}
+				shapelist = null;
+				shapelist = kek;
+			}
+			init();
+		</script>
+	</body>
+</html>
