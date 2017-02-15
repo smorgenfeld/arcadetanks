@@ -8,29 +8,30 @@
 		<script>
 			var win = document.getElementById("game");
 			var ctx = win.getContext("2d");
-			var width = win.width;
-			var height = win.height;
+			var wwidth = win.width;
+			var wheight = win.height;
 			var shapelist = [];
-			var dragging = initdragging();
-			var p = getplayer();
+			var p = gettank();
 			var img = ['resources/tbot.png','resources/ttop.png'];
 
 			window.onkeydown = function (e) {
 				var code = e.keyCode ? e.keyCode : e.which;
+				p.dir.reset();
 				if (code === 38 || code === 87) {
-					p.forward = true;
+					p.dir.f = true;
 				}
 				if (code === 83 || code === 40) {
-					p.backward = true;					}
+					p.dir.b = true;					}
 				if (code === 68 || code === 39) {
-					p.right = true;
+					p.dir.r = true;
 				}
 				if (code === 65 || code === 37) {
-					p.left = true;
+					p.dir.l = true;
 				}
+			}
 
-			win.onclick = function (e) {
-      }
+			//win.onclick = function (e) {
+      //}
 
 			function getMousePos(canvas, evt) {
 				var rekt = canvas.getBoundingClientRect();
@@ -76,12 +77,11 @@
 				ctx.clearRect(0,0, win.width, win.height);
 				ctx.closePath();
 				p.update();
-				dragging.update();
-				for (var i = 0; i < shapelist.length; i++) {
-					if (shapelist[i].type != "null") {
-						shapelist[i].update();
-					}
-				}
+				//for (var i = 0; i < shapelist.length; i++) {
+				//	if (shapelist[i].type != "null") {
+				//		shapelist[i].update();
+				//	}
+				//}
 			}
 			function shapelistdelete(i) {
 				var kek = [];
