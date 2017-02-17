@@ -1,24 +1,33 @@
 function gettank() {
   tank = {
     width: 20,
-    height:20,
+    height: 20,
     x: 0,
     y: 0,
-    rx: wwidth/2,
-    ry: wheight/2,
+    rx: wwidth/2 - 10,
+    ry: wheight/2 - 10,
+    ax: wwidth/2,
+    ay: wheight/2,
     btheta: 0,
     ttheta: 0,
+    theta: 0,
+    bot: null,
+    top: null,
     dir: {
       f: false,
       b: false,
       r: false,
       l: false,
       reset: function() {
-        this.dir.f = false;
-        this.dir.b = false;
-        this.dir.r = false;
-        this.dir.l = false;
-      }
+        p.dir.f = false;
+        p.dir.b = false;
+        p.dir.r = false;
+        p.dir.l = false;
+      },
+    },
+    target: {
+      x: 0,
+      y: 0,
     },
     v: {
       x: 0,
@@ -57,8 +66,11 @@ function gettank() {
       else if (this.dir.r) {
         this.v.x = this.v.max;
       }
+      this.top.update();
+      this.bot.update();
     },
   }
+  tank.bot = newblock(tank, "bottom"),
+  tank.top = newblock(tank, "top")
   return tank;
 }
-
