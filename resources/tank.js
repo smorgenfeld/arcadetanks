@@ -1,15 +1,13 @@
 function gettank() {
   tank = {
-    width: 20,
-    height: 20,
+    width: 80,
+    height: 160,
     x: 0,
     y: 0,
-    rx: wwidth/2 - 10,
-    ry: wheight/2 - 10,
+    rx: wwidth/2-40,
+    ry: wheight/2-120,
     ax: wwidth/2,
     ay: wheight/2,
-    btheta: 0,
-    ttheta: 0,
     theta: 0,
     bot: null,
     top: null,
@@ -35,42 +33,51 @@ function gettank() {
       max: 5,
     },
     update: function() {
+      this.top.theta = Math.atan2((this.target.y - this.ay), (this.target.x - this.ax)) + Math.PI/2;
       var ANG = 0.707107;
       this.v.y = 0;
       this.v.x = 0;
       if (this.dir.f && this.dir.l) {
         this.v.x = this.v.max * -ANG;
         this.v.y = this.v.max * ANG;
+        this.bot.theta = 7*Math.PI/4;
       }
       else if (this.dir.f && this.dir.r) {
         this.v.x = this.v.max * ANG;
         this.v.y = this.v.max * ANG;
+        this.bot.theta = 3*Math.PI/4;
       }
       else if (this.dir.b && this.dir.l) {
         this.v.x = this.v.max * -ANG;
         this.v.y = this.v.max * -ANG;
+        this.bot.theta = 9*Math.PI/4;
       }
       else if (this.dir.b && this.dir.r) {
         this.v.x = this.v.max * ANG;
         this.v.y = this.v.max * -ANG;
+        this.bot.theta = Math.PI/4;
       }
       else if (this.dir.b) {
         this.v.y = -this.v.max;
+        this.bot.theta = Math.PI;
       }
       else if (this.dir.f) {
         this.v.y = this.v.max;
+        this.bot.theta = 0;
       }
       else if (this.dir.l) {
         this.v.x = -this.v.max;
+        this.bot.theta = 3*Math.PI/2;
       }
       else if (this.dir.r) {
         this.v.x = this.v.max;
+        this.bot.theta = Math.PI/2;
       }
-      this.top.update();
       this.bot.update();
+      this.top.update();
     },
   }
-  tank.bot = newblock(tank, "bottom"),
-  tank.top = newblock(tank, "top")
+  tank.bot = newblock(tank, "bottom");
+  tank.top = newblock(tank, "top");
   return tank;
 }

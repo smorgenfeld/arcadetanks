@@ -3,6 +3,7 @@ function newblock(par,type) {
 		rx: par.rx,
 		ry: par.ry,
 		type: type,
+		theta: 0,
 		polygon: [[0,0],[0,0],[0,0],[0,0]],
 		img: null,
 		par: par,
@@ -10,7 +11,9 @@ function newblock(par,type) {
 			this.polygon = this.updatepolygon();
       ctx.save();
       ctx.translate(this.par.ax, this.par.ay);
-      ctx.rotate(par.theta);
+      ctx.rotate(this.theta);
+			ctx.translate(-this.par.ax, -this.par.ay);
+			ctx.translate(this.par.rx, this.par.ry);
       ctx.drawImage(this.img,0,0);
       ctx.stroke();
       ctx.restore();
@@ -29,7 +32,7 @@ function newblock(par,type) {
       updatepolygon: function() {
 	       var poly = [[this.rx,this.ry],[this.rx,this.ry+this.par.height],[this.rx+this.par.width,this.ry+this.par.height],[this.rx+this.par.width,this.ry]];
 	       for (var i = 0; i < poly.length; i++) {
-	         var out = rotate_point(poly[i][0], poly[i][1], this.par.ax, this.par.ay, this.par.theta);
+	         var out = rotate_point(poly[i][0], poly[i][1], this.par.ax, this.par.ay, this.theta);
 	         poly[i][0] = out.x;
 	         poly[i][1] = out.y;
 	       }
@@ -37,10 +40,10 @@ function newblock(par,type) {
      	},
     }
 	if (block.type == "bottom") {
-		setimg(block,1);
+		setimg(block,0);
 	}
 	else if (block.type == "top") {
-		setimg(block,0);
+		setimg(block,1);
 	}
 	return block;
 }

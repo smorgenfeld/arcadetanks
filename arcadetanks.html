@@ -5,13 +5,13 @@
 		<script type="text/javascript" src="resources/tankblock.js"></script>
 	</head>
 	<body>
-		<canvas id="game" width="500" height="500" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
+		<canvas id="game" width="700" height="500" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
 		<script>
 			var img = ["resources/tbot.png","resources/ttop.png"];
 			var win = document.getElementById("game");
 			var ctx = win.getContext("2d");
-			var wwidth = win.width;
-			var wheight = win.height;
+			var wwidth = 700;
+			var wheight = 500;
 			var p = gettank();
 
 			window.onkeydown = function (e) {
