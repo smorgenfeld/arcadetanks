@@ -35,8 +35,8 @@ function gettank() {
     update: function() {
       this.top.theta = Math.atan2((this.target.y - this.ay), (this.target.x - this.ax)) + Math.PI/2;
       var ANG = 0.707107;
-      this.v.y = 0;
-      this.v.x = 0;
+      this.v.y *= 0.9;
+      this.v.x *= 0.9;
       if (this.dir.f && this.dir.l) {
         this.v.x = this.v.max * -ANG;
         this.v.y = this.v.max * ANG;
@@ -45,17 +45,17 @@ function gettank() {
       else if (this.dir.f && this.dir.r) {
         this.v.x = this.v.max * ANG;
         this.v.y = this.v.max * ANG;
-        this.bot.theta = 3*Math.PI/4;
+        this.bot.theta = Math.PI/4;
       }
       else if (this.dir.b && this.dir.l) {
         this.v.x = this.v.max * -ANG;
         this.v.y = this.v.max * -ANG;
-        this.bot.theta = 9*Math.PI/4;
+        this.bot.theta = 5*Math.PI/4;
       }
       else if (this.dir.b && this.dir.r) {
         this.v.x = this.v.max * ANG;
         this.v.y = this.v.max * -ANG;
-        this.bot.theta = Math.PI/4;
+        this.bot.theta = 3*Math.PI/4;
       }
       else if (this.dir.b) {
         this.v.y = -this.v.max;
@@ -73,6 +73,8 @@ function gettank() {
         this.v.x = this.v.max;
         this.bot.theta = Math.PI/2;
       }
+      this.x += this.v.x;
+      this.y += this.v.y;
       this.bot.update();
       this.top.update();
     },

@@ -3,6 +3,7 @@
 		<title>tankz yay</title>
 		<script type="text/javascript" src="resources/tank.js"></script>
 		<script type="text/javascript" src="resources/tankblock.js"></script>
+		<script type="text/javascript" src="resources/map.js"></script>
 	</head>
 	<body>
 		<canvas id="game" width="700" height="500" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
@@ -13,10 +14,10 @@
 			var wwidth = 700;
 			var wheight = 500;
 			var p = gettank();
+			var map = getmap();
 
 			window.onkeydown = function (e) {
 				var code = e.keyCode ? e.keyCode : e.which;
-				p.dir.reset();
 				if (code === 38 || code === 87) {
 					p.dir.f = true;
 				}
@@ -30,6 +31,22 @@
 					p.dir.l = true;
 				}
 			}
+
+			window.onkeyup = function (e) {
+				var code = e.keyCode ? e.keyCode : e.which;
+				if (code === 38 || code === 87) {
+					p.dir.f = false;
+				}
+				if (code === 83 || code === 40) {
+					p.dir.b = false;
+				}
+				if (code === 68 || code === 39) {
+					p.dir.r = false;
+				}
+				if (code === 65 || code === 37) {
+					p.dir.l = false;
+				}
+			};
 
 			//win.onclick = function (e) {
       //}
@@ -48,22 +65,6 @@
 				p.target.y = pos.y;
 			})
 
-			window.onkeyup = function (e) {
-				var code = e.keyCode ? e.keyCode : e.which;
-				if (code === 38 || code === 87) {
-					p.forward = false;
-				}
-				if (code === 83 || code === 40) {
-					p.backward = false;
-				}
-				if (code === 68 || code === 39) {
-					p.right = false;
-				}
-				if (code === 65 || code === 37) {
-					p.left = false;
-				}
-			};
-
 			function init() {
 				window.requestAnimationFrame(gameloop);
 			}
@@ -78,6 +79,7 @@
 				ctx.clearRect(0,0, win.width, win.height);
 				ctx.closePath();
 				p.update();
+				map.update();
 				//for (var i = 0; i < shapelist.length; i++) {
 				//	if (shapelist[i].type != "null") {
 				//		shapelist[i].update();
