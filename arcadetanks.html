@@ -6,15 +6,15 @@
 		<script type="text/javascript" src="resources/map.js"></script>
 	</head>
 	<body>
-		<canvas id="game" width="700" height="500" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
+		<canvas id="game" width="500" height="500" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
 		<script>
 			var img = ["resources/tbot.png","resources/ttop.png"];
 			var win = document.getElementById("game");
 			var ctx = win.getContext("2d");
-			var wwidth = 700;
+			var wwidth = 500;
 			var wheight = 500;
-			var p = gettank();
 			var map = getmap();
+			var p = gettank();
 
 			window.onkeydown = function (e) {
 				var code = e.keyCode ? e.keyCode : e.which;
@@ -78,8 +78,8 @@
 				ctx.beginPath();
 				ctx.clearRect(0,0, win.width, win.height);
 				ctx.closePath();
-				p.update();
 				map.update();
+				p.update();
 				//for (var i = 0; i < shapelist.length; i++) {
 				//	if (shapelist[i].type != "null") {
 				//		shapelist[i].update();

@@ -32,6 +32,14 @@ function gettank() {
       y: 0,
       max: 5,
     },
+    camera: {
+      x: 0,
+      y: 0,
+      width: win.width,
+      height: win.height,
+      maxY: map.pheight - win.height,
+      maxX: map.pwidth - win.width,
+    },
     update: function() {
       this.top.theta = Math.atan2((this.target.y - this.ay), (this.target.x - this.ax)) + Math.PI/2;
       var ANG = 0.707107;
@@ -75,6 +83,10 @@ function gettank() {
       }
       this.x += this.v.x;
       this.y += this.v.y;
+      this.x = Math.max(0, Math.min(this.x, this.camera.maxX));
+      this.y = Math.max(0, Math.min(this.y, this.camera.maxY));
+      this.camera.x = this.x;
+      this.camera.y = this.y;
       this.bot.update();
       this.top.update();
     },
