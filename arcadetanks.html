@@ -4,6 +4,8 @@
 		<script type="text/javascript" src="resources/tank.js"></script>
 		<script type="text/javascript" src="resources/tankblock.js"></script>
 		<script type="text/javascript" src="resources/map.js"></script>
+		<script type="text/javascript" src="resources/player.js"></script>
+		<script type="text/javascript" src="resources/enemy.js"></script>
 	</head>
 	<body>
 		<canvas id="game" width="900" height="700" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
@@ -14,7 +16,8 @@
 			var wwidth = 900;
 			var wheight = 700;
 			var map = getmap(30,30);
-			var p = gettank();
+			var p = new Player(0,0);
+			var enlist = [];
 
 			window.onkeydown = function (e) {
 				var code = e.keyCode ? e.keyCode : e.which;
@@ -67,6 +70,7 @@
 
 			function init() {
 				window.requestAnimationFrame(gameloop);
+				enlist.push(new Enemy(800,800));
 			}
 
 			function gameloop() {
@@ -79,12 +83,10 @@
 				ctx.clearRect(0,0, win.width, win.height);
 				ctx.closePath();
 				map.update();
-				p.update();
-				//for (var i = 0; i < shapelist.length; i++) {
-				//	if (shapelist[i].type != "null") {
-				//		shapelist[i].update();
-				//	}
-				//}
+		    for (var i = 0; i < enlist.length; i++) {
+		      enlist[i].update();
+		    }
+			  p.update();
 			}
 			function shapelistdelete(i) {
 				var kek = [];
