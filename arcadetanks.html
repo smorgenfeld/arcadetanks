@@ -6,14 +6,14 @@
 		<script type="text/javascript" src="resources/map.js"></script>
 	</head>
 	<body>
-		<canvas id="game" width="500" height="500" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
+		<canvas id="game" width="900" height="700" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
 		<script>
 			var img = ["resources/tbot.png","resources/ttop.png"];
 			var win = document.getElementById("game");
 			var ctx = win.getContext("2d");
-			var wwidth = 500;
-			var wheight = 500;
-			var map = getmap();
+			var wwidth = 900;
+			var wheight = 700;
+			var map = getmap(30,30);
 			var p = gettank();
 
 			window.onkeydown = function (e) {

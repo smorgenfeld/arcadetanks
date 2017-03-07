@@ -82,7 +82,7 @@ function gettank() {
         this.bot.theta = Math.PI/2;
       }
       this.x += this.v.x;
-      this.y += this.v.y;
+      this.y -= this.v.y;
       this.x = Math.max(0, Math.min(this.x, this.camera.maxX));
       this.y = Math.max(0, Math.min(this.y, this.camera.maxY));
       this.camera.x = this.x;
