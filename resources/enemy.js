@@ -16,12 +16,15 @@ class Enemy extends Tank {
     this.ay = this.ry + 120;
   }
   doai() {
+    this.center.x = this.x + 40;
+    this.center.y = this.y + 120;
     this.target.x = p.ax;
     this.target.y = p.ay;
     var tx = this.target.x;
     var ty = this.target.y;
     this.dir.reset(this);
     if (Math.sqrt(Math.pow(tx-this.ax,2) + Math.pow(ty-this.ay,2)) > 250) {
+      this.togglefiring(false);
       if (p.rx > this.rx) {
         this.dir.r = true;
       }
@@ -34,6 +37,9 @@ class Enemy extends Tank {
       if (p.ry >= this.ry) {
         this.dir.b = true;
       }
+    }
+    else if (!this.firing) {
+      this.togglefiring(true);
     }
   }
 }

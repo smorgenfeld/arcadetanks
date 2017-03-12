@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="resources/map.js"></script>
 		<script type="text/javascript" src="resources/player.js"></script>
 		<script type="text/javascript" src="resources/enemy.js"></script>
+		<script type="text/javascript" src="resources/projectile.js"></script>
 	</head>
 	<body>
 		<canvas id="game" width="900" height="700" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
@@ -16,8 +17,9 @@
 			var wwidth = 900;
 			var wheight = 700;
 			var map = getmap(30,30);
-			var p = new Player(0,0);
+			var p = new Player(800,800);
 			var enlist = [];
+			var projlist = [];
 
 			window.onkeydown = function (e) {
 				var code = e.keyCode ? e.keyCode : e.which;
@@ -51,8 +53,13 @@
 				}
 			};
 
-			//win.onclick = function (e) {
-      //}
+			win.onmousedown = function (e) {
+				p.togglefiring(true);
+      }
+
+			win.onmouseup = function (e) {
+				p.togglefiring(false);
+      }
 
 			function getMousePos(canvas, evt) {
 				var rekt = canvas.getBoundingClientRect();
@@ -86,6 +93,17 @@
 		    for (var i = 0; i < enlist.length; i++) {
 		      enlist[i].update();
 		    }
+				var oktodelete = true;
+				for (var i = 0; i < projlist.length; i++) {
+		      projlist[i].update();
+					if (oktodelete && !projlist[i].dead) {
+						oktodelete = false;
+					}
+		    }
+				if (oktodelete == true) {
+					projlist = null;
+					projlist = [];
+				}
 			  p.update();
 			}
 			function shapelistdelete(i) {

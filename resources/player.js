@@ -16,6 +16,10 @@ class Player extends Tank {
       maxX: map.pwidth - win.width,
     };
   }
+  doai() {
+    this.center.x = this.x + 450;
+    this.center.y = this.y + 350;
+  }
   dodifferent() {
     this.x = Math.max(0, Math.min(this.x, this.camera.maxX));
     this.y = Math.max(0, Math.min(this.y, this.camera.maxY));
