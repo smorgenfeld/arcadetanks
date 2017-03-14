@@ -7,7 +7,8 @@ class Enemy extends Tank {
     this.ay = this.ry + 120;
     this.bot = newblock(this, "bottom");
     this.top = newblock(this, "top");
-    this.v.max = 1
+    this.v.max = 1;
+    this.happy = false;
   }
   dodifferent() {
     this.rx = this.x - p.x;
@@ -23,23 +24,30 @@ class Enemy extends Tank {
     var tx = this.target.x;
     var ty = this.target.y;
     this.dir.reset(this);
-    if (Math.sqrt(Math.pow(tx-this.ax,2) + Math.pow(ty-this.ay,2)) > 250) {
+    if (!this.happy && Math.sqrt(Math.pow(tx-this.ax,2) + Math.pow(ty-this.ay,2)) > 250) {
       this.togglefiring(false);
-      if (p.rx > this.rx) {
+      if (p.rx - 10 > this.rx) {
         this.dir.r = true;
       }
-      if (p.rx <= this.rx) {
+      if (p.rx + 10<= this.rx) {
         this.dir.l = true;
       }
-      if (p.ry < this.ry) {
+      if (p.ry - 10< this.ry) {
         this.dir.f = true;
       }
-      if (p.ry >= this.ry) {
+      if (p.ry + 10>= this.ry) {
         this.dir.b = true;
       }
     }
-    else if (!this.firing) {
-      this.togglefiring(true);
+    else if (this.happy && Math.sqrt(Math.pow(tx-this.ax,2) + Math.pow(ty-this.ay,2)) > 350) {
+      this.happy = false;
+      this.togglefiring(false);
+    }
+    else {
+      if (!this.happy) {
+        this.togglefiring(true);
+      }
+      this.happy = true;
     }
   }
 }

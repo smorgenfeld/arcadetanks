@@ -42,7 +42,7 @@ class Tank {
       x: 0,
       y: 0,
       max: 5,
-      amax: .1,
+      amax: .05,
     };
   }
   dodifferent() {
@@ -60,23 +60,49 @@ class Tank {
   update() {
     this.doai()
     this.targettheta = Math.atan2((this.target.y - this.ay), (this.target.x - this.ax)) + Math.PI/2;
-    if (this.top.theta >= Math.PI *2) {
-      this.top.theta -= Math.PI*2;
+    if (this.targettheta < 0) {
+      this.targettheta += Math.PI*2;
     }
-    else if (this.top.theta <= -Math.PI*2) {
-      this.top.theta += Math.PI*2;
+    var facingmtarget = this.top.theta - this.targettheta;
+    var anglediff = facingmtarget;
+    if (this.top.theta > Math.PI * 2) {
+      this.top.theta -= Math.PI * 2;
     }
-    if (this.targettheta > Math.PI * 3 / 2 - this.v.amax*2) {
-      this.targettheta -= Math.PI * 2;
+    else if (this.top.theta < -Math.PI * 2) {
+      this.top.theta += Math.PI * 2;
     }
-    else if (this.targettheta < -Math.PI / 2 + this.v.amax*2) {
-      this.targettheta += Math.PI * 2;
+    if (Math.abs(facingmtarget) > Math.PI) {
+      if (this.targettheta > this.top.theta) {
+        anglediff = 1*((1*Math.PI*2 - this.top.theta) + this.targettheta);
+      }
+      else {
+        anglediff = -1*((5*Math.PI/2 - this.top.theta) + this.targettheta);
+      }
     }
-    if (this.targettheta > this.top.theta) {
-      this.top.theta += this.v.amax;
+    if (anglediff > Math.PI * 2) {
+      anglediff -= Math.PI * 2;
+      if (anglediff > Math.PI * 2) {
+        anglediff -= Math.PI * 2;
+      }
+    }
+    else if (anglediff < -Math.PI * 2) {
+      anglediff += Math.PI * 2;
+    }
+    if (anglediff > 0) {
+      if (anglediff > this.v.amax) {
+        this.top.theta -= this.v.amax;
+      }
+      else {
+        this.top.theta = this.targettheta;
+      }
     }
     else {
-      this.top.theta -= this.v.amax;
+      if (-anglediff > this.v.amax) {
+        this.top.theta += this.v.amax;
+      }
+      else {
+        this.top.theta = this.targettheta;
+      }
     }
     var ANG = 0.707107;
     if (this.dir.f && this.dir.l) {
@@ -123,17 +149,19 @@ class Tank {
       this.v.y *= 0.95;
       this.v.x *= 0.95;
     }
-    this.x += this.v.x;
-    this.y -= this.v.y;
     if (this.firing) {
       if (this.firetime.cur >= this.firetime.max) {
         this.firetime.cur = 0;
   			projlist.push(new Projectile(this.center.x,this.center.y,this.target.x,this.target.y,this.top.theta - Math.PI/2 + Math.random()/this.acc - Math.random()/this.acc,this));
+        this.v.x -= Math.sin(this.top.theta) * 1;
+        this.v.y -= Math.cos(this.top.theta) * 1;
       }
       else {
         this.firetime.cur++;
       }
     }
+    this.x += this.v.x;
+    this.y -= this.v.y;
     for (var i = 0; i < projlist.length; i++) {
       if (collision(this,projlist[i])) {
         projlist[i].dead = true;

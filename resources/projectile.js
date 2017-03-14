@@ -21,7 +21,7 @@ class Projectile {
     this.v = {
       x: 0,
       y: 0,
-      max: 5,
+      max: 5,//Math.sqrt(Math.pow(par.v.x,2)+Math.pow(par.v.y,2)),
     }
   }
   updatepolygon() {
