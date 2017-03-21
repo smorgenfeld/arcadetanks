@@ -19,16 +19,16 @@ function newblock(par,type) {
       ctx.drawImage(this.img,0,0);
       ctx.stroke();
       ctx.restore();
-      for (var i = 0; i < this.polygon.length; i++) {
-       		if (i < this.polygon.length-1) {
-          		ctx.moveTo(this.polygon[i][0],this.polygon[i][1]);
-          		ctx.lineTo(this.polygon[i+1][0],this.polygon[i+1][1]);
-        		}
-        		else {
-          		ctx.moveTo(this.polygon[i][0],this.polygon[i][1]);
-          		ctx.lineTo(this.polygon[0][0],this.polygon[0][1]);
-        		}
-      	}
+      //for (var i = 0; i < this.polygon.length; i++) {
+       //		if (i < this.polygon.length-1) {
+      //    		ctx.moveTo(this.polygon[i][0],this.polygon[i][1]);
+      //    		ctx.lineTo(this.polygon[i+1][0],this.polygon[i+1][1]);
+      //  		}
+      //  		else {
+      //    		ctx.moveTo(this.polygon[i][0],this.polygon[i][1]);
+      //    		ctx.lineTo(this.polygon[0][0],this.polygon[0][1]);
+      //  		}
+      //	}
       	ctx.stroke();
       },
       updatepolygon: function() {

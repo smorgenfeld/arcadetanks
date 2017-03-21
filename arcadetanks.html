@@ -77,7 +77,7 @@
 
 			function init() {
 				window.requestAnimationFrame(gameloop);
-				for (var i = 0; i < 1; i++) {
+				for (var i = 0; i < 2; i++) {
 					enlist.push(new Enemy(i*100,200));
 				}
 			}
@@ -120,6 +120,11 @@
 				}
 				shapelist = null;
 				shapelist = kek;
+			}
+			function randint(min, max) {
+  			min = Math.ceil(min);
+  			max = Math.floor(max);
+  			return Math.floor(Math.random() * (max - min + 1)) + min;
 			}
 			init();
 		</script>

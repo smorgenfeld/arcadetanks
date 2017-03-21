@@ -17,6 +17,7 @@ class Tank {
     this.bot = null;
     this.top = null;
     this.firing = false;
+    this.stopped = false;
     this.firetime = {
       max: 10,
       cur: 0,
@@ -153,17 +154,20 @@ class Tank {
       if (this.firetime.cur >= this.firetime.max) {
         this.firetime.cur = 0;
   			projlist.push(new Projectile(this.center.x,this.center.y,this.target.x,this.target.y,this.top.theta - Math.PI/2 + Math.random()/this.acc - Math.random()/this.acc,this));
-        this.v.x -= Math.sin(this.top.theta) * 1;
-        this.v.y -= Math.cos(this.top.theta) * 1;
+        this.v.x -= Math.sin(this.top.theta) * 1/2;
+        this.v.y -= Math.cos(this.top.theta) * 1/2;
       }
       else {
         this.firetime.cur++;
       }
     }
+    for (var i = 0; i < enlist.length; i++) {
+      tankcollision(this, enlist[i]);
+    }
     this.x += this.v.x;
     this.y -= this.v.y;
     for (var i = 0; i < projlist.length; i++) {
-      if (collision(this,projlist[i])) {
+      if (projcollision(this,projlist[i])) {
         projlist[i].dead = true;
       }
     }
@@ -172,9 +176,18 @@ class Tank {
     this.top.update();
   }
 };
-function collision(par, proj) {
-  if (proj.par !== par && Math.sqrt(Math.pow(par.center.x - proj.x - proj.width, 2) + Math.pow(par.center.y - proj.y - proj.width,2)) < 100) {
+function projcollision(par, proj) {
+  if (proj.par !== par && Math.sqrt(Math.pow(par.center.x - proj.x, 2) + Math.pow(par.center.y - proj.y,2)) < 80) {
     this.health -= proj.health;
     proj.dead = true;
+  }
+}
+function tankcollision(par, other) {
+  if (par !== other && Math.sqrt(Math.pow(par.center.x - other.center.x, 2) + Math.pow(par.center.y - other.center.y, 2)) < 80) {
+    other.x += par.v.x;
+    other.y += par.v.y;
+    par.v.x *= -1/2;
+    par.v.y *= -1/2;
+    par.stopped = true;
   }
 }
