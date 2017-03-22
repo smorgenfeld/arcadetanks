@@ -3,6 +3,9 @@ class Tank {
     this.health = 100;
     this.width = 80;
     this.height = 160;
+    this.mass = 1000;
+    this.thrust = 100;
+    this.a = this.thrust / this.mass;
     this.x = x;
     this.y = y;
     this.rx = 0;
@@ -107,42 +110,42 @@ class Tank {
     }
     var ANG = 0.707107;
     if (this.dir.f && this.dir.l) {
-      this.v.x = this.v.max * -ANG;
-      this.v.y = this.v.max * ANG;
+      this.v.x += this.a * -ANG;
+      this.v.y += this.a * ANG;
       this.bot.theta = 7*Math.PI/4;
     }
     else if (this.dir.f && this.dir.r) {
-      this.v.x = this.v.max * ANG;
-      this.v.y = this.v.max * ANG;
+      this.v.x += this.a * ANG;
+      this.v.y += this.a * ANG;
       this.bot.theta = Math.PI/4;
     }
     else if (this.dir.b && this.dir.l) {
-      this.v.x = this.v.max * -ANG;
-      this.v.y = this.v.max * -ANG;
+      this.v.x += this.a * -ANG;
+      this.v.y += this.a * -ANG;
       this.bot.theta = 5*Math.PI/4;
     }
     else if (this.dir.b && this.dir.r) {
-      this.v.x = this.v.max * ANG;
-      this.v.y = this.v.max * -ANG;
+      this.v.x += this.a * ANG;
+      this.v.y += this.a * -ANG;
       this.bot.theta = 3*Math.PI/4;
     }
     else if (this.dir.b) {
-      this.v.y = -this.v.max;
+      this.v.y += -this.a;
       this.v.x *= 0.97;
       this.bot.theta = Math.PI;
     }
     else if (this.dir.f) {
-      this.v.y = this.v.max;
+      this.v.y += this.a;
       this.v.x *= 0.97;
       this.bot.theta = 0;
     }
     else if (this.dir.l) {
-      this.v.x = -this.v.max;
+      this.v.x += -this.a;
       this.v.y *= 0.97;
       this.bot.theta = 3*Math.PI/2;
     }
     else if (this.dir.r) {
-      this.v.x = this.v.max;
+      this.v.x += this.a;
       this.v.y *= 0.97;
       this.bot.theta = Math.PI/2;
     }
@@ -150,6 +153,7 @@ class Tank {
       this.v.y *= 0.95;
       this.v.x *= 0.95;
     }
+    //if (this.v.)
     if (this.firing) {
       if (this.firetime.cur >= this.firetime.max) {
         this.firetime.cur = 0;
@@ -184,10 +188,17 @@ function projcollision(par, proj) {
 }
 function tankcollision(par, other) {
   if (par !== other && Math.sqrt(Math.pow(par.center.x - other.center.x, 2) + Math.pow(par.center.y - other.center.y, 2)) < 80) {
-    other.x += par.v.x;
-    other.y += par.v.y;
-    par.v.x *= -1/2;
-    par.v.y *= -1/2;
-    par.stopped = true;
+    var oy = 0;
+    var ox = 0;
+    par.v.x, ox = ecol(par.mass,par.v.x,other.mass,other.v.x);
+    par.v.y, oy = ecol(par.mass,par.v.y,other.mass,other.v.y);
+    other.y -= oy;
+    other.x += ox;
+    //par.stopped = true;
   }
+}
+function ecol(m1,v1,m2,v2) {
+  var v1final = ((m1 - m2) / (m1 + m2) * v1) + ((2 * m2) / (m1 + m2) * v2);
+  var v2final = ((2 * m1) / (m1 + m2) * v1) - ((m1 - m2) / (m1 + m2) * v2);
+  return -v1final, v2final;
 }
