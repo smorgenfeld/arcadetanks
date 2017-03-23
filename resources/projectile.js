@@ -13,10 +13,7 @@ class Projectile {
     this.ay = this.ry + this.height/2;
     this.dead = false;
     this.theta = theta;//Math.atan2((this.ty - this.ay), (this.tx - this.ax)) + Math.PI/2;
-    this.life = {
-      max: 100,
-      cur: 0,
-    };
+    this.life = 100;
     this.polygon = [[0,0],[0,0],[0,0],[0,0]];
     this.v = {
       x: 0,
@@ -35,8 +32,8 @@ class Projectile {
   }
   update() {
     if (!this.dead) {
-      this.life.cur += 1;
-      if (this.life.cur >= this.life.max) {
+      this.life -= 1;
+      if (this.life <= 0) {
         this.dead = true;
       }
       this.v.x = Math.cos(this.theta) * this.v.max;

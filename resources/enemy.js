@@ -7,7 +7,8 @@ class Enemy extends Tank {
     this.ay = this.ry + 120;
     this.bot = newblock(this, "bottom");
     this.top = newblock(this, "top");
-    this.v.max = 2;
+    this.v.max = 1;
+    this.a = 1
     this.happy = false;
     this.gtfo = false;
   }

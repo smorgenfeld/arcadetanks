@@ -7,7 +7,9 @@ class Player extends Tank {
     this.ay = wheight/2;
     this.bot = newblock(this, "bottom");
     this.top = newblock(this, "top");
-    this.mass = 1500;
+    this.mass = 1000;
+    this.v.max = 10;
+    this.a = 3
     this.camera = {
       x: 0,
       y: 0,

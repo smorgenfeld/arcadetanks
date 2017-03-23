@@ -25,7 +25,7 @@ class Tank {
       max: 10,
       cur: 0,
     };
-    this.acc = 5;
+    this.acc = 3;
     this.dir = {
       f: false,
       b: false,
@@ -153,7 +153,12 @@ class Tank {
       this.v.y *= 0.95;
       this.v.x *= 0.95;
     }
-    //if (this.v.)
+    if (Math.abs(this.v.y) < 0.05) { this.v.y = 0;}
+    if (Math.abs(this.v.x) < 0.05) { this.v.x = 0;}
+    if (this.v.x > ANG * this.v.max) {this.v.x = this.v.max * ANG}
+    else if (this.v.x < ANG * -this.v.max) {this.v.x = -this.v.max * ANG}
+    if (this.v.y > ANG * this.v.max) {this.v.y = this.v.max * ANG}
+    else if (this.v.y < ANG * -this.v.max) {this.v.y = -this.v.max * ANG}
     if (this.firing) {
       if (this.firetime.cur >= this.firetime.max) {
         this.firetime.cur = 0;
@@ -168,8 +173,11 @@ class Tank {
     for (var i = 0; i < enlist.length; i++) {
       tankcollision(this, enlist[i]);
     }
+    tankcollision(this,p);
     this.x += this.v.x;
     this.y -= this.v.y;
+    ctx.arc(this.center.x-p.x, this.center.y-p.y, 40, 0, 2 * Math.PI, true);
+    ctx.stroke();
     for (var i = 0; i < projlist.length; i++) {
       if (projcollision(this,projlist[i])) {
         projlist[i].dead = true;
@@ -182,23 +190,36 @@ class Tank {
 };
 function projcollision(par, proj) {
   if (proj.par !== par && Math.sqrt(Math.pow(par.center.x - proj.x, 2) + Math.pow(par.center.y - proj.y,2)) < 80) {
-    this.health -= proj.health;
+    this.health -= proj.life;
     proj.dead = true;
   }
 }
 function tankcollision(par, other) {
   if (par !== other && Math.sqrt(Math.pow(par.center.x - other.center.x, 2) + Math.pow(par.center.y - other.center.y, 2)) < 80) {
-    var oy = 0;
-    var ox = 0;
-    par.v.x, ox = ecol(par.mass,par.v.x,other.mass,other.v.x);
-    par.v.y, oy = ecol(par.mass,par.v.y,other.mass,other.v.y);
-    other.y -= oy;
-    other.x += ox;
+    var outx = inecol(par.mass,par.v.x,other.mass,other.v.x);
+    var outy = inecol(par.mass,par.v.y,other.mass,other.v.y);
+
+    par.v.x = outx[0];
+    other.v.x = outx[1];
+    par.v.y = outy[0];
+    other.v.y = outy[1];
+    other.x += other.v.x;
+    other.y -= other.v.y;
+    if (par != 0) {
+      par.x += par.v.x;
+      par.y -= par.v.y;
+    }
     //par.stopped = true;
   }
 }
 function ecol(m1,v1,m2,v2) {
   var v1final = ((m1 - m2) / (m1 + m2) * v1) + ((2 * m2) / (m1 + m2) * v2);
   var v2final = ((2 * m1) / (m1 + m2) * v1) - ((m1 - m2) / (m1 + m2) * v2);
-  return -v1final, v2final;
+  return [v1final, v2final];
+}
+function inecol(m1,v1,m2,v2) {
+  var coRes = 1;
+  var v1final = (coRes * m2 * (v2 - v1) + m1 * v1 + m1 * v2) / (m1 + m2);
+  var v2final = (coRes * m1 * (v1 - v2) + m1 * v1 + m2 * v2) / (m1 + m2);
+  return [v1final,v2final];
 }
