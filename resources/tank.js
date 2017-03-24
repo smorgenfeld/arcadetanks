@@ -1,10 +1,14 @@
 class Tank {
   constructor(x,y) {
+    this.shape = Matter.Bodies.rectangle(x,y,80,160, {
+      density: .001,
+      friction: 0.97,
+    });
     this.health = 100;
     this.width = 80;
     this.height = 160;
     this.mass = 1000;
-    this.thrust = 100;
+    this.thrust = 10000;
     this.a = this.thrust / this.mass;
     this.x = x;
     this.y = y;
@@ -62,6 +66,7 @@ class Tank {
     this.firing = way;
   }
   update() {
+    Matter.Body.update(this.shape,1/60,1,0);
     this.doai()
     this.targettheta = Math.atan2((this.target.y - this.ay), (this.target.x - this.ax)) + Math.PI/2;
     if (this.targettheta < 0) {
@@ -110,51 +115,59 @@ class Tank {
     }
     var ANG = 0.707107;
     if (this.dir.f && this.dir.l) {
-      this.v.x += this.a * -ANG;
-      this.v.y += this.a * ANG;
+      Matter.Body.applyForce(this.shape, {x:0,y:0},{x:this.thrust*-ANG,y:this.thrust*-ANG})
+      //this.v.x += this.a * -ANG;
+      //this.v.y += this.a * ANG;
       this.bot.theta = 7*Math.PI/4;
     }
     else if (this.dir.f && this.dir.r) {
-      this.v.x += this.a * ANG;
-      this.v.y += this.a * ANG;
+      Matter.Body.applyForce(this.shape, {x:0,y:0},{x:this.thrust*ANG,y:this.thrust*-ANG})
+      //this.v.x += this.a * ANG;
+      //this.v.y += this.a * ANG;
       this.bot.theta = Math.PI/4;
     }
     else if (this.dir.b && this.dir.l) {
-      this.v.x += this.a * -ANG;
-      this.v.y += this.a * -ANG;
+      Matter.Body.applyForce(this.shape, {x:0,y:0},{x:this.thrust*-ANG,y:this.thrust*ANG})
+      //this.v.x += this.a * -ANG;
+      //this.v.y += this.a * -ANG;
       this.bot.theta = 5*Math.PI/4;
     }
     else if (this.dir.b && this.dir.r) {
-      this.v.x += this.a * ANG;
-      this.v.y += this.a * -ANG;
+      Matter.Body.applyForce(this.shape, {x:0,y:0},{x:this.thrust*ANG,y:this.thrust*ANG})
+      //this.v.x += this.a * ANG;
+      //this.v.y += this.a * -ANG;
       this.bot.theta = 3*Math.PI/4;
     }
     else if (this.dir.b) {
-      this.v.y += -this.a;
-      this.v.x *= 0.97;
+      Matter.Body.applyForce(this.shape,{x:0,y:0}, {x:0,y:this.thrust*ANG})
+      //this.v.y += -this.a;
+      //this.v.x *= 0.97;
       this.bot.theta = Math.PI;
     }
     else if (this.dir.f) {
-      this.v.y += this.a;
-      this.v.x *= 0.97;
+      Matter.Body.applyForce(this.shape, {x:0,y:0},{x:0,y:this.thrust*-ANG})
+      //this.v.y += this.a;
+      //this.v.x *= 0.97;
       this.bot.theta = 0;
     }
     else if (this.dir.l) {
-      this.v.x += -this.a;
-      this.v.y *= 0.97;
+      Matter.Body.applyForce(this.shape, {x:0,y:0},{x:this.thrust*-ANG,y:0})
+      //this.v.x += -this.a;
+      //this.v.y *= 0.97;
       this.bot.theta = 3*Math.PI/2;
     }
     else if (this.dir.r) {
-      this.v.x += this.a;
-      this.v.y *= 0.97;
+      Matter.Body.applyForce(this.shape, {x:0,y:0},{x:this.thrust*ANG,y:0})
+      //this.v.x += this.a;
+      //this.v.y *= 0.97;
       this.bot.theta = Math.PI/2;
     }
     else {
       this.v.y *= 0.95;
       this.v.x *= 0.95;
     }
-    if (Math.abs(this.v.y) < 0.05) { this.v.y = 0;}
-    if (Math.abs(this.v.x) < 0.05) { this.v.x = 0;}
+    //if (Math.abs(this.v.y) < 0.05) { this.v.y = 0;}
+    //if (Math.abs(this.v.x) < 0.05) { this.v.x = 0;}
     if (this.v.x > ANG * this.v.max) {this.v.x = this.v.max * ANG}
     else if (this.v.x < ANG * -this.v.max) {this.v.x = -this.v.max * ANG}
     if (this.v.y > ANG * this.v.max) {this.v.y = this.v.max * ANG}
@@ -174,9 +187,9 @@ class Tank {
       tankcollision(this, enlist[i]);
     }
     tankcollision(this,p);
-    this.x += this.v.x;
-    this.y -= this.v.y;
-    ctx.arc(this.center.x-p.x, this.center.y-p.y, 40, 0, 2 * Math.PI, true);
+    this.x = this.shape.position.x;
+    this.y = this.shape.position.y;
+    //ctx.arc(this.center.x-p.x, this.center.y-p.y, 40, 0, 2 * Math.PI, true);
     ctx.stroke();
     for (var i = 0; i < projlist.length; i++) {
       if (projcollision(this,projlist[i])) {
