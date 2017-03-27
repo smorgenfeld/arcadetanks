@@ -103,7 +103,7 @@
 			function render() {
 				window.requestAnimationFrame(render);
 				//Runner.tick(runner, engine, 1000/16);
-				Engine.update(engine,[delta = 0.01],[correction = 1]);
+
 				var bodies = Matter.Composite.allBodies(engine.world);
 				for (var i = 0; i < bodies.length; i += 1) {
         var vertices = bodies[i].vertices;
@@ -125,6 +125,7 @@
 				//ctx.closePath();
 				//p.update();
 				drawshapes();
+				Engine.update(engine,[delta = 0.01],[correction = 1]);
 				//console.log(p.v.x,p.v.y)
 			}
 

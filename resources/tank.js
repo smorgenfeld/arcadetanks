@@ -160,8 +160,12 @@ class Tank {
     if (this.firing) {
       if (this.firetime.cur >= this.firetime.max) {
         this.firetime.cur = 0;
-  			projlist.push(new Projectile(this.center.x,this.center.y,this.target.x,this.target.y,this.top.theta - Math.PI/2 + Math.random()/this.acc - Math.random()/this.acc,this));
-        Matter.Body.applyForce(this.shape, {x:this.width/2,y:this.height/2},{x:Math.cos(this.top.theta) * 1/2,y:Math.sin(this.top.theta) * 1/2})
+  			projlist.push(new Projectile(this.center.x + 50*Math.cos(this.top.theta-Math.PI/2),this.center.y + 50*Math.sin(this.top.theta-Math.PI/2),this.target.x,this.target.y,this.top.theta - Math.PI/2 + Math.random()/this.acc - Math.random()/this.acc,this));
+        Matter.Body.applyForce(projlist[projlist.length-1].shape, {x:this.width/2,y:this.height/2},{x:Math.sin(this.top.theta) * 10000,y:-Math.cos(this.top.theta) * 10000})
+        if (this !== p) {
+          console.log(projlist[projlist.length-1].shape)//projlist[projlist.length-1].top.theta)
+        }
+        Matter.Body.applyForce(this.shape, {x:this.width/2,y:this.height/2},{x:-Math.sin(this.top.theta) * 10000,y:Math.cos(this.top.theta) * 10000})
       }
       else {
         this.firetime.cur++;
@@ -179,7 +183,7 @@ class Tank {
     //ctx.stroke();
     for (var i = 0; i < projlist.length; i++) {
       if (projcollision(this,projlist[i])) {
-        projlist[i].dead = true;
+        //projlist[i].kill();
       }
     }
     this.dodifferent();

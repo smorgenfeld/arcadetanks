@@ -1,5 +1,13 @@
 class Projectile {
   constructor(x,y,tx,ty,theta,par) {
+    this.shape = Matter.Bodies.circle(x,y, 3, {
+      density: .005,
+      friction: 0.97,
+      restitution: 1,
+      frictionAir: 0.001,
+      inertia: Infinity
+    });
+    Matter.World.add(world,this.shape);
     this.par = par;
     this.x = x;
     this.y = y;
@@ -30,16 +38,24 @@ class Projectile {
      }
      return poly;
   }
+  kill() {
+    this.dead = true;
+    Matter.World.remove(world,this.shape);
+  }
   update() {
+    if (this.par !== p) {
+      console.log(Math.sqrt(Math.pow(this.shape.velocity.x,2) + Math.pow(this.shape.velocity.y,2)))
+    }
     if (!this.dead) {
       this.life -= 1;
-      if (this.life <= 0) {
-        this.dead = true;
+      if (this.life <= 0 || Math.sqrt(Math.pow(this.shape.velocity.x,2) + Math.pow(this.shape.velocity.y,2)) < 2) {
+
+        this.kill();
       }
-      this.v.x = Math.cos(this.theta) * this.v.max;
-      this.v.y = Math.sin(this.theta) * this.v.max;
-      this.x += this.v.x;
-      this.y += this.v.y;
+      //this.v.x = Math.cos(this.theta) * this.v.max;
+      //this.v.y = Math.sin(this.theta) * this.v.max;
+      this.x = this.shape.position.x;
+      this.y = this.shape.position.y;
       this.rx = this.x - p.camera.x;
       this.ry = this.y - p.camera.y;
       this.ax = this.rx + this.width/2;

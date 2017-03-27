@@ -6,7 +6,7 @@ class Player extends Tank {
     this.top = newblock(this, "top");
     this.mass = 1000;
     this.v.max = 10;
-    this.thrust *= 100;
+    //this.thrust *= 100;
     this.a = 3;
     this.mouse = {
       x: 0,
