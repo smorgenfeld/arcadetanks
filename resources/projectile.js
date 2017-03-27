@@ -1,6 +1,7 @@
 class Projectile {
   constructor(x,y,tx,ty,theta,par) {
-    this.shape = Matter.Bodies.circle(x,y, 3, {
+    this.rad = 3
+    this.shape = Matter.Bodies.circle(x,y,this.rad, {
       density: .005,
       friction: 0.97,
       restitution: 1,
@@ -13,8 +14,7 @@ class Projectile {
     this.y = y;
     this.tx = tx;
     this.ty = ty;
-    this.width = 10;
-    this.height = 10;
+    this.width = this.height = this.rad*2;
     this.rx = this.x - p.camera.x;
     this.ry = this.y - p.camera.y;
     this.ax = this.rx + this.width/2;
@@ -27,7 +27,8 @@ class Projectile {
       x: 0,
       y: 0,
       max: 5,//Math.sqrt(Math.pow(par.v.x,2)+Math.pow(par.v.y,2)),
-    }
+    };
+    setprojimg(this,2);
   }
   updatepolygon() {
      var poly = [[this.rx,this.ry],[this.rx,this.ry+this.height],[this.rx+this.width,this.ry+this.height],[this.rx+this.width,this.ry]];
@@ -43,13 +44,9 @@ class Projectile {
     Matter.World.remove(world,this.shape);
   }
   update() {
-    if (this.par !== p) {
-      console.log(Math.sqrt(Math.pow(this.shape.velocity.x,2) + Math.pow(this.shape.velocity.y,2)))
-    }
     if (!this.dead) {
       this.life -= 1;
       if (this.life <= 0 || Math.sqrt(Math.pow(this.shape.velocity.x,2) + Math.pow(this.shape.velocity.y,2)) < 2) {
-
         this.kill();
       }
       //this.v.x = Math.cos(this.theta) * this.v.max;
@@ -61,6 +58,14 @@ class Projectile {
       this.ax = this.rx + this.width/2;
       this.ay = this.ry + this.height/2;
       this.polygon = this.updatepolygon();
+      ctx.save();
+      ctx.translate(this.ax, this.ay);
+      ctx.rotate(this.theta);
+      ctx.translate(-this.ax, -this.ay);
+      ctx.translate(this.rx, this.ry);
+      ctx.drawImage(this.img,0,0);
+      ctx.stroke();
+      ctx.restore();
       for (var i = 0; i < this.polygon.length; i++) {
           if (i < this.polygon.length-1) {
               ctx.moveTo(this.polygon[i][0],this.polygon[i][1]);
@@ -74,6 +79,12 @@ class Projectile {
         ctx.stroke();
       }
     }
+  }
+  function setprojimg(block, index) {
+    block.img = new Image(block.width,block.height);
+    block.img.src = img[index];
+    block.img.style.height = '5px';
+    block.img.style.width = '5px';
   }
   function rotate_point(pointX, pointY, originX, originY, angle) {
     //http://jsfiddle.net/dahousecat/4TtvU/
