@@ -7,8 +7,8 @@ class Projectile {
     this.ty = ty;
     this.width = 10;
     this.height = 10;
-    this.rx = this.x - p.x;
-    this.ry = this.y - p.y;
+    this.rx = this.x - p.camera.x;
+    this.ry = this.y - p.camera.y;
     this.ax = this.rx + this.width/2;
     this.ay = this.ry + this.height/2;
     this.dead = false;
@@ -40,8 +40,8 @@ class Projectile {
       this.v.y = Math.sin(this.theta) * this.v.max;
       this.x += this.v.x;
       this.y += this.v.y;
-      this.rx = this.x - p.x;
-      this.ry = this.y - p.y;
+      this.rx = this.x - p.camera.x;
+      this.ry = this.y - p.camera.y;
       this.ax = this.rx + this.width/2;
       this.ay = this.ry + this.height/2;
       this.polygon = this.updatepolygon();

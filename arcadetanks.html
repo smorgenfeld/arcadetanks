@@ -29,23 +29,11 @@
 
 			var engine = Engine.create(),
 				world = engine.world;
-			//var render = Render.create({
-      //  element: document.body,
-      //  engine: engine,
-      //  options: {
-      //      canvas: document.getElementById('game'),
-      //      showAngleIndicator: false,
-      //      wireframes: false
-      //  }
-	    //});
 
-			//Render.run(render);
-
-			//var runner = Runner.create();
-			//Runner.run(runner, engine);
+			var runner = Runner.create();
 
 			world.bodies = [];
-			var map = getmap(30,30);
+			var map = getmap(60,60);
 			var p = new Player(800,800);
 			var enlist = [];
 			var projlist = [];
@@ -93,28 +81,51 @@
 			function getMousePos(canvas, evt) {
 				var rekt = canvas.getBoundingClientRect();
 				return {
-					x: evt.clientX - rekt.left,
-					y: evt.clientY - rekt.top
+					x: (evt.clientX - rekt.left),
+					y: (evt.clientY - rekt.top)
 				};
 			}
 
 			win.addEventListener('mousemove', function(evt) {
 				var pos = getMousePos(win, evt);
-				p.target.x = pos.x;
-				p.target.y = pos.y;
+				p.mouse.x = pos.x;
+				p.mouse.y = pos.y;
 			})
 
 			function init() {
-				window.requestAnimationFrame(gameloop);
+				//Engine.run(engine);
+				window.requestAnimationFrame(render);
 				for (var i = 0; i < 10; i++) {
-					enlist.push(new Enemy(i*100,200));
+					enlist.push(new Enemy(i*100,100));
 				}
 			}
 
-			function gameloop() {
+			function render() {
+				window.requestAnimationFrame(render);
+				//Runner.tick(runner, engine, 1000/16);
+				Engine.update(engine,[delta = 0.01],[correction = 1]);
+				var bodies = Matter.Composite.allBodies(engine.world);
+				for (var i = 0; i < bodies.length; i += 1) {
+        var vertices = bodies[i].vertices;
+
+        ctx.moveTo(vertices[0].x, vertices[0].y);
+
+        for (var j = 1; j < vertices.length; j += 1) {
+            ctx.lineTo(vertices[j].x, vertices[j].y);
+        }
+
+        ctx.lineTo(vertices[0].x, vertices[0].y);
+    }
+
+    ctx.lineWidth = 1;
+    //ctx.strokeStyle = '#999';
+    ctx.stroke();
+				//ctx.beginPath();
+				//ctx.clearRect(0,0, win.width, win.height);
+				//ctx.closePath();
+				//p.update();
 				drawshapes();
 				//console.log(p.v.x,p.v.y)
-				window.requestAnimationFrame(gameloop);
 			}
 
 			function drawshapes() {
