@@ -1,6 +1,6 @@
 class Projectile {
   constructor(x,y,tx,ty,theta,par) {
-    this.rad = 3
+    this.rad = 5;
     this.shape = Matter.Bodies.circle(x,y,this.rad, {
       density: .005,
       friction: 0.97,
@@ -37,11 +37,22 @@ class Projectile {
        poly[i][0] = out.x;
        poly[i][1] = out.y;
      }
+     for (var i = 0; i < poly.length; i++) {
+         if (i < poly.length-1) {
+             ctx.moveTo(poly[i][0],poly[i][1]);
+             ctx.lineTo(poly[i+1][0],poly[i+1][1]);
+           }
+        else {
+         ctx.moveTo(poly[i][0],poly[i][1]);
+         ctx.lineTo(poly[0][0],poly[0][1]);
+       }
+       ctx.stroke();
+     }
      return poly;
   }
   kill() {
     this.dead = true;
-    Matter.World.remove(world,this.shape);
+    Matter.World.remove(engine.world,this.shape);
   }
   update() {
     if (!this.dead) {
@@ -57,34 +68,21 @@ class Projectile {
       this.ry = this.y - p.camera.y;
       this.ax = this.rx + this.width/2;
       this.ay = this.ry + this.height/2;
-      this.polygon = this.updatepolygon();
       ctx.save();
       ctx.translate(this.ax, this.ay);
       ctx.rotate(this.theta);
       ctx.translate(-this.ax, -this.ay);
       ctx.translate(this.rx, this.ry);
-      ctx.drawImage(this.img,0,0);
+      ctx.drawImage(this.img,0,0,this.width,this.height);
       ctx.stroke();
       ctx.restore();
-      for (var i = 0; i < this.polygon.length; i++) {
-          if (i < this.polygon.length-1) {
-              ctx.moveTo(this.polygon[i][0],this.polygon[i][1]);
-              ctx.lineTo(this.polygon[i+1][0],this.polygon[i+1][1]);
-            }
-            else {
-              ctx.moveTo(this.polygon[i][0],this.polygon[i][1]);
-              ctx.lineTo(this.polygon[0][0],this.polygon[0][1]);
-            }
-        }
-        ctx.stroke();
-      }
+      //this.polygon = this.updatepolygon();
     }
   }
+}
   function setprojimg(block, index) {
     block.img = new Image(block.width,block.height);
     block.img.src = img[index];
-    block.img.style.height = '5px';
-    block.img.style.width = '5px';
   }
   function rotate_point(pointX, pointY, originX, originY, angle) {
     //http://jsfiddle.net/dahousecat/4TtvU/

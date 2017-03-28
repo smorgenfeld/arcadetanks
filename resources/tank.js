@@ -33,7 +33,7 @@ class Tank {
       max: 10,
       cur: 0,
     };
-    this.acc = 3;
+    this.acc = 1;
     this.dir = {
       f: false,
       b: false,
@@ -161,7 +161,7 @@ class Tank {
       if (this.firetime.cur >= this.firetime.max) {
         this.firetime.cur = 0;
   			projlist.push(new Projectile(this.center.x + 50*Math.cos(this.top.theta-Math.PI/2),this.center.y + 50*Math.sin(this.top.theta-Math.PI/2),this.target.x,this.target.y,this.top.theta - Math.PI/2 + Math.random()/this.acc - Math.random()/this.acc,this));
-        Matter.Body.applyForce(projlist[projlist.length-1].shape, {x:this.width/2,y:this.height/2},{x:Math.sin(this.top.theta) * 10000,y:-Math.cos(this.top.theta) * 10000})
+        Matter.Body.applyForce(projlist[projlist.length-1].shape, {x:this.width/2,y:this.height/2},{x:Math.cos(projlist[projlist.length-1].theta) * 10000,y:Math.sin(projlist[projlist.length-1].theta) * 10000})
         Matter.Body.update(projlist[projlist.length-1].shape,0.01,1,1);
         Matter.Body.applyForce(this.shape, {x:this.width/2,y:this.height/2},{x:-Math.sin(this.top.theta) * 10000,y:Math.cos(this.top.theta) * 10000})
       }
@@ -192,6 +192,6 @@ class Tank {
 function projcollision(par, proj) {
   if (proj.par !== par && Math.sqrt(Math.pow(par.center.x - proj.x, 2) + Math.pow(par.center.y - proj.y,2)) < 80) {
     this.health -= proj.life;
-    proj.dead = true;
+    proj.kill();
   }
 }
