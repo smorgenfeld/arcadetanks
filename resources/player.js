@@ -1,12 +1,14 @@
 class Player extends Tank {
   constructor(x,y) {
     super(x,y)
-    console.log(this.shape.position.x,this.x)
+    this.shape.collisionFilter.category = 0x0002;
     this.bot = newblock(this, "bottom");
     this.top = newblock(this, "top");
     this.mass = 1000;
     this.v.max = 10;
-    //this.thrust *= 100;
+    this.bulsize = 5;
+    this.bulthrust = 30000;
+    this.acc = 5
     this.a = 3;
     this.mouse = {
       x: 0,

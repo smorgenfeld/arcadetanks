@@ -1,9 +1,9 @@
 class Enemy extends Tank {
   constructor(x,y) {
     super(x,y);
+    this.shape.collisionFilter.category = 0x0004;
     this.bot = newblock(this, "bottom");
     this.top = newblock(this, "top");
-    this.v.max = 1;
     //this.thrust /= 5;
     this.happy = false;
     this.gtfo = false;

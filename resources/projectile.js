@@ -1,13 +1,16 @@
 class Projectile {
-  constructor(x,y,tx,ty,theta,par) {
-    this.rad = 5;
+  constructor(x,y,tx,ty,theta,par,rad) {
+    this.rad = rad;
     this.shape = Matter.Bodies.circle(x,y,this.rad, {
-      density: .005,
+      density: .01,
       friction: 0.97,
-      restitution: 1,
+      restitution: .5,
       frictionAir: 0.001,
       inertia: Infinity
     });
+    if (par !== p) {
+      this.shape.collisionFilter.mask = 0x0002;
+    }
     Matter.World.add(world,this.shape);
     this.par = par;
     this.x = x;

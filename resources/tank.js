@@ -1,5 +1,17 @@
 class Tank {
   constructor(x,y) {
+    this.gene = {
+      bulsize: {
+        g: [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1],
+        s: 0,
+      },
+      bulthrust: {
+        g: [0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
+        s: 0,
+      },
+    };
+    this.gene.bulsize.s = this.bulsize = genesize(this.gene.bulsize.g);
+    this.gene.bulthrust.s = this.bulthrust = genesize(this.gene.bulthrust.g) * 5000;
     this.shape = Matter.Bodies.circle(x+40,y+120, 40, {
       density: .001,
       friction: 0.97,
@@ -13,7 +25,6 @@ class Tank {
     this.height = 160;
     this.mass = 1000;
     this.thrust = 50000;
-    this.a = this.thrust / this.mass;
     this.x = x;
     this.y = y;
     this.rx = 0;
@@ -30,7 +41,7 @@ class Tank {
     this.firing = false;
     this.stopped = false;
     this.firetime = {
-      max: 10,
+      max: 50,
       cur: 0,
     };
     this.acc = 1;
@@ -160,10 +171,10 @@ class Tank {
     if (this.firing) {
       if (this.firetime.cur >= this.firetime.max) {
         this.firetime.cur = 0;
-  			projlist.push(new Projectile(this.center.x + 50*Math.cos(this.top.theta-Math.PI/2),this.center.y + 50*Math.sin(this.top.theta-Math.PI/2),this.target.x,this.target.y,this.top.theta - Math.PI/2 + Math.random()/this.acc - Math.random()/this.acc,this));
-        Matter.Body.applyForce(projlist[projlist.length-1].shape, {x:this.width/2,y:this.height/2},{x:Math.cos(projlist[projlist.length-1].theta) * 10000,y:Math.sin(projlist[projlist.length-1].theta) * 10000})
+  			projlist.push(new Projectile(this.center.x + 50*Math.cos(this.top.theta-Math.PI/2),this.center.y + 50*Math.sin(this.top.theta-Math.PI/2),this.target.x,this.target.y,this.top.theta - Math.PI/2 + Math.random()/this.acc - Math.random()/this.acc, this, this.bulsize));
+        Matter.Body.applyForce(projlist[projlist.length-1].shape, {x:this.width/2,y:this.height/2},{x:Math.cos(projlist[projlist.length-1].theta) * this.bulthrust,y:Math.sin(projlist[projlist.length-1].theta) * this.bulthrust})
         Matter.Body.update(projlist[projlist.length-1].shape,0.01,1,1);
-        Matter.Body.applyForce(this.shape, {x:this.width/2,y:this.height/2},{x:-Math.sin(this.top.theta) * 10000,y:Math.cos(this.top.theta) * 10000})
+        Matter.Body.applyForce(this.shape, {x:this.width/2,y:this.height/2},{x:-Math.sin(this.top.theta) * this.bulthrust*2,y:Math.cos(this.top.theta) * this.bulthrust*2})
       }
       else {
         this.firetime.cur++;
@@ -179,11 +190,11 @@ class Tank {
     this.ay = this.ry + 120;
     //ctx.arc(this.ax, this.ay, 40, 0, 2 * Math.PI, true);
     //ctx.stroke();
-    for (var i = 0; i < projlist.length; i++) {
-      if (projcollision(this,projlist[i])) {
+    //for (var i = 0; i < projlist.length; i++) {
+    //  if (projcollision(this,projlist[i])) {
         //projlist[i].kill();
-      }
-    }
+    //  }
+    //}
     this.dodifferent();
     this.bot.update();
     this.top.update();
@@ -194,4 +205,7 @@ function projcollision(par, proj) {
     this.health -= proj.life;
     proj.kill();
   }
+}
+function genesize(gene) {
+  return gene.reduce((a, b) => a + b, 0);
 }
