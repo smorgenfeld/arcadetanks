@@ -1,13 +1,13 @@
 <html>
 	<head>
 		<title>tankz yay</title>
-		<script type="text/javascript" src="resources/tank.js"></script>
-		<script type="text/javascript" src="resources/tankblock.js"></script>
-		<script type="text/javascript" src="resources/map.js"></script>
-		<script type="text/javascript" src="resources/player.js"></script>
-		<script type="text/javascript" src="resources/enemy.js"></script>
-		<script type="text/javascript" src="resources/projectile.js"></script>
-		<script type="text/javascript" src="resources/matter.js"></script>
+		<script src="resources/tank.js"></script>
+		<script src="resources/tankblock.js"></script>
+		<script src="resources/map.js"></script>
+		<script src="resources/player.js"></script>
+		<script src="resources/enemy.js"></script>
+		<script src="resources/projectile.js"></script>
+		<script src="resources/matter.js"></script>
 	</head>
 	<body>
 		<canvas id="game" width="900" height="700" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
@@ -18,6 +18,7 @@
 			var wwidth = 900;
 			var wheight = 700;
 			var Engine = Matter.Engine,
+				Events = Matter.Events,
         Render = Matter.Render,
         Runner = Matter.Runner,
         Composites = Matter.Composites,
@@ -31,6 +32,19 @@
 				world = engine.world;
 
 			var runner = Runner.create();
+
+			Events.on(engine, 'collisionStart', function(event) {
+        var pairs = event.pairs;
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i];
+						if (pair.bodyA.label === 'proj') {
+				      pair.bodyA.par.collided(pair.bodyB.par);
+				    }
+						if (pair.bodyB.label === 'proj') {
+							pair.bodyB.par.collided(pair.bodyA.par);
+						}
+        }
+    	});
 
 			world.bodies = [];
 			var map = getmap(60,60);

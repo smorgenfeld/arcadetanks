@@ -6,7 +6,9 @@ class Projectile {
       friction: 0.97,
       restitution: .5,
       frictionAir: 0.001,
-      inertia: Infinity
+      inertia: Infinity,
+      label: 'proj',
+      par: this,
     });
     if (par !== p) {
       this.shape.collisionFilter.mask = 0x0002;
@@ -56,6 +58,10 @@ class Projectile {
   kill() {
     this.dead = true;
     Matter.World.remove(engine.world,this.shape);
+  }
+  collided(other) {
+    other.life -= 10;
+    this.life = 5;
   }
   update() {
     if (!this.dead) {

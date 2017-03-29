@@ -17,10 +17,12 @@ class Tank {
       friction: 0.97,
       restitution: .5,
       frictionAir: 0.2,
-      inertia: Infinity
+      inertia: Infinity,
+      label: 'tank',
+      par: this,
     });
     Matter.World.add(world,this.shape);
-    this.health = 100;
+    this.life = 100;
     this.width = 80;
     this.height = 160;
     this.mass = 1000;
