@@ -8,6 +8,8 @@
 		<script src="resources/enemy.js"></script>
 		<script src="resources/projectile.js"></script>
 		<script src="resources/matter.js"></script>
+		<script src="resources/gene.js"></script>
+		<script src="resources/structure.js"></script>
 	</head>
 	<body>
 		<canvas id="game" width="900" height="700" style="border:1px solid #d3d3d3;cursor:crosshair">Your browser does not support the HTML5 canvas tag. Try updating to a modern browser, such as anything other than Internet Explorer.</canvas>
@@ -51,6 +53,7 @@
 			var p = new Player(800,800);
 			var enlist = [];
 			var projlist = [];
+			var struc = new structure(p,10);
 
 			window.onkeydown = function (e) {
 				var code = e.keyCode ? e.keyCode : e.which;
@@ -109,9 +112,7 @@
 			function init() {
 				//Engine.run(engine);
 				window.requestAnimationFrame(render);
-				for (var i = 0; i < 10; i++) {
-					enlist.push(new Enemy(i*100,100));
-				}
+				struc.update();
 			}
 
 			function render() {

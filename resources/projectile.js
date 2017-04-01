@@ -38,7 +38,8 @@ class Projectile {
   updatepolygon() {
      var poly = [[this.rx,this.ry],[this.rx,this.ry+this.height],[this.rx+this.width,this.ry+this.height],[this.rx+this.width,this.ry]];
      for (var i = 0; i < poly.length; i++) {
-       var out = rotate_point(poly[i][0], poly[i][1], this.ax, this.ay, this.theta);
+       var out = rotate_point(poly[i][0], poly[i][1],
+       this.ax, this.ay, this.theta);
        poly[i][0] = out.x;
        poly[i][1] = out.y;
      }
@@ -62,6 +63,7 @@ class Projectile {
   collided(other) {
     other.life -= 10;
     this.life = 5;
+    this.par.damdelt += 10;
   }
   update() {
     if (!this.dead) {

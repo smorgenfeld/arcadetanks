@@ -8,6 +8,8 @@ class Player extends Tank {
     this.v.max = 10;
     this.bulsize = 5;
     this.bulthrust = 30000;
+    this.life = 10000000;
+    this.firetime.max = 10;
     this.acc = 5
     this.a = 3;
     this.mouse = {
